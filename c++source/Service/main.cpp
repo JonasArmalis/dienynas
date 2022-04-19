@@ -4,6 +4,8 @@
     The main loop of the program
 
 */
+const char* DIR = "C:\\dienynas\\database\\dienynas.db";
+const char* PATH = "C:\\dienynas\\DATA";
 
 int main()
 {
@@ -15,12 +17,12 @@ int main()
         // If the directory isn't empty, then read all the files and and write the data to DB
         if (!fs::is_empty(PATH))
         {
-            ReadDir(files);
+            ReadDir(files, PATH);
             ReadFiles(entries, files);
             Print(entries);
-            DeleteDirectoryContents();
+            DeleteDirectoryContents(PATH);
             files.erase(files.begin(), files.end());
-            WriteToDB(entries);
+            WriteToDB(entries, DIR);
             entries.erase(entries.begin(), entries.end());
         }
 

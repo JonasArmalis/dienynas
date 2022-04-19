@@ -8,9 +8,6 @@
 #include "Entry.h"
 #include <sqlite3.h>
 
-static const char* DIR = "C:\\dienynas\\database\\dienynas.db";
-static const char* PATH = "C:\\dienynas\\DATA";
-
 
 namespace fs = std::filesystem;
 using namespace std;
@@ -19,14 +16,14 @@ using Record = std::vector<std::string>;
 using Records = std::vector<Record>;
 
 //Regular functions
-void ReadDir(vector<string>& files);
+void ReadDir(vector<string>& files, const char* PATH);
 void ReadFiles(vector<Entry>& entries, vector <string>& files);
 void Print(vector <Entry>& entries);
-void DeleteDirectoryContents();
-bool Student_exists(Entry entry, int& ID);
-void WriteToDB(vector<Entry>& entries);
+void DeleteDirectoryContents(const char* PATH);
+bool Student_exists(Entry entry, int& ID, const char* DIR);
+void WriteToDB(vector<Entry>& entries, const char* DIR);
 
 //SQL functions
-Records Select_stmt(string stmt);
-void Insert_stmt(string stmt);
+Records Select_stmt(string stmt, const char* DIR);
+void Insert_stmt(string stmt, const char* DIR);
 int select_callback(void* p_data, int num_fields, char** p_fields, char** p_col_names);

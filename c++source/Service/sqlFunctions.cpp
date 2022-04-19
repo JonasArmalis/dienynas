@@ -13,7 +13,7 @@ int select_callback(void* p_data, int num_fields, char** p_fields, char** p_col_
     return 0;
 }
 
-void Insert_stmt(string stmt)
+void Insert_stmt(string stmt, const char* DIR)
 {
     sqlite3* DB;
     char* errmsg;
@@ -34,7 +34,7 @@ void Insert_stmt(string stmt)
     sqlite3_close(DB);
 }
 
-Records Select_stmt(string stmt)
+Records Select_stmt(string stmt, const char* DIR)
 {
     sqlite3* DB;
     Records records;
