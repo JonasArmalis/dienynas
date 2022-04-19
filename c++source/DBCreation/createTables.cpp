@@ -20,16 +20,20 @@ int main()
     string sqlCreateGradesTable = "CREATE TABLE grades("
         "ID INTEGER PRIMARY KEY AUTOINCREMENT, "
         "studentID      INTEGER NOT NULL,"
-        "subject        TEXT NOT NULL,"
+        "subjectiD      INTEGER NOT NULL,"
         "grade          INTEGER NOT NULL);";
 
-    string sqlInsert = "INSERT INTO students (ID, name, surname)"
-       "VALUES(NULL, 'Jonas', 'Armalis');";
+    string sqlCreateSubjectsTable = "CREATE TABLE subjects("
+        "ID INTEGER PRIMARY KEY AUTOINCREMENT, "
+        "subject        TEXT NOT NULL);";
+    
+
+
 
 
     //ExecuteSql(DIR, sqlCreateStudentsTable);
     //ExecuteSql(DIR, sqlCreateGradesTable);
-    ExecuteSql(DIR, sqlInsert);
+    ExecuteSql(DIR, sqlCreateSubjectsTable);
 
     return 0;
 }

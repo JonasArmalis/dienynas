@@ -46,14 +46,16 @@ void WriteToDB(vector<Entry>& entries, const char* DIR)
     for (auto& entry : entries)
     {
         int student_ID = -1;
+        string get_subject_id = "SELECT ID from subjects WHERE subject = '" + entry.GetSubject() + "';";
+        int subject_ID = stoi(Select_stmt(get_subject_id, DIR)[0][0]);
+
         //If a student already exists, then we only insert the grade into the grades table
         if (Student_exists(entry, student_ID, DIR))
         {
-
-            string insert_grade = "INSERT INTO grades (ID, studentID, subject, grade) VALUES ("
+            string insert_grade = "INSERT INTO grades (ID, studentID, subjectID, grade) VALUES ("
                 "NULL, '"
                 + to_string(student_ID) + "', '"
-                + entry.GetSubject() + "', '"
+                + to_string(subject_ID) + "', '"
                 + to_string(entry.GetGrade()) + "');";
 
             Insert_stmt(insert_grade, DIR);
@@ -73,10 +75,10 @@ void WriteToDB(vector<Entry>& entries, const char* DIR)
 
             student_ID = stoi(Select_stmt(get_id, DIR)[0][0]);
 
-            string insert_grade = "INSERT INTO grades (ID, studentID, subject, grade) VALUES ("
+            string insert_grade = "INSERT INTO grades (ID, studentID, subjectID, grade) VALUES ("
                 "NULL, '"
                 + to_string(student_ID) + "', '"
-                + entry.GetSubject() + "', '"
+                + to_string(subject_ID) + "', '"
                 + to_string(entry.GetGrade()) + "');";
 
             Insert_stmt(insert_grade, DIR);
