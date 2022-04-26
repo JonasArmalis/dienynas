@@ -10,6 +10,9 @@
                     <a class="nav-link" href="create-student-form.php">Pridėti mokinį</a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link" href="create-class-form.php">Sukurti klasę</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" href="create-record-form.php">Rašyti pažymius</a>
                 </li>
                 <li class="nav-item">

@@ -1,10 +1,24 @@
 .center {
-    margin: auto;
-    width: 100%;
-    padding: 20px;
-  }
+  margin: auto;
+  width: 100%;
+  padding: 20px;
+}
+
 .head {
 
-    left: 40%;
-    /*transform: translate(-50%, -50%);*/
-  }
+  left: 40%;
+  /*transform: translate(-50%, -50%);*/
+}
+
+.background {
+  /* The image used */
+  background-image: url("frontpage.jpg");
+
+  /* Full height */
+  height: 100%;
+
+  /* Center and scale the image nicely */
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
