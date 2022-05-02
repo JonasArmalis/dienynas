@@ -1,11 +1,12 @@
 #include "Entry.h"
 
-Entry::Entry(string name, string surname, string subject, int grade)
+Entry::Entry(string name, string surname, string subject, string cl, int grade)
 {
 	this->grade = 0;
 	this->name = name;
 	this->surname = surname;
 	this->subject = subject;
+	this->clas = cl;
 	this->grade = grade;
 }
 
@@ -45,6 +46,11 @@ string Entry::GetSurname()
 string Entry::GetSubject()
 {
 	return this->subject;
+}
+
+string Entry::GetClass()
+{
+	return this->clas;
 }
 
 int Entry::GetGrade()
