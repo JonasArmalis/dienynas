@@ -8,7 +8,7 @@ class Entry
 
 public:
 	//Constructors/Destructors
-	Entry(string, string , string , int);
+	Entry(string, string , string , string, int);
 	~Entry();
 
 	//Functions
@@ -23,12 +23,14 @@ public:
 	string GetName();
 	string GetSurname();
 	string GetSubject();
+	string GetClass();
 	int GetGrade();
 
 
 
 
 private:
+	string clas;
 	string name;
 	string surname;
 	string subject;

@@ -16,12 +16,12 @@ void ReadFiles(vector<Entry>& entries, vector <string>& files)
         ifstream in(files[i]);
         for (size_t j = 0; !in.eof(); j++)
         {
-            string name, surname, subject;
+            string name, surname, subject, clas;
             int grade;
 
-            in >> name >> surname >> subject >> grade;
+            in >> name >> surname >> subject >> grade>> clas;
 
-            Entry container(name, surname, subject, grade);
+            Entry container(name, surname, subject, clas, grade);
             entries.push_back(container);
         }
         in.close();
@@ -38,7 +38,31 @@ void Print(vector <Entry>& entries)
 void DeleteDirectoryContents(const char* PATH)
 {
     for (const auto& entry : fs::directory_iterator(PATH))
-        fs::remove_all(entry.path());
+    {
+        recycle_file(entry.path().u8string());
+    }
+       //fs::remove_all(entry.path());
+}
+
+bool recycle_file(string path) {
+
+    std::wstring widestr = std::wstring(path.begin(), path.end());
+    const wchar_t* widecstr = widestr.c_str();
+
+    SHFILEOPSTRUCT fileOp; 
+    fileOp.hwnd = NULL;
+    fileOp.wFunc = FO_DELETE;
+    fileOp.pFrom = widecstr;
+    fileOp.pTo = NULL;
+    fileOp.fFlags = FOF_ALLOWUNDO | FOF_NOERRORUI | FOF_NOCONFIRMATION | FOF_SILENT;
+    int result = SHFileOperation(&fileOp);
+
+    if (result != 0) {
+        return false;
+    }
+    else {
+        return true;
+    }
 }
 
 void WriteToDB(vector<Entry>& entries, const char* DIR)
@@ -46,11 +70,16 @@ void WriteToDB(vector<Entry>& entries, const char* DIR)
     for (auto& entry : entries)
     {
         int student_ID = -1;
+        int class_ID = -1;
         string get_subject_id = "SELECT ID from subjects WHERE subject = '" + entry.GetSubject() + "';";
         int subject_ID = stoi(Select_stmt(get_subject_id, DIR)[0][0]);
 
+        bool studentExists = Student_exists(entry, student_ID, DIR);
+        bool classExists = Class_exists(entry.GetClass(), class_ID, DIR);
+
+
         //If a student already exists, then we only insert the grade into the grades table
-        if (Student_exists(entry, student_ID, DIR))
+        if (studentExists)
         {
             string insert_grade = "INSERT INTO grades (ID, studentID, subjectID, grade) VALUES ("
                 "NULL, '"
@@ -63,10 +92,23 @@ void WriteToDB(vector<Entry>& entries, const char* DIR)
         //If a student doesn't exist, then insert the student and the grade
         else
         {
-            string create_student = "INSERT INTO students (ID, name, surname) VALUES ("
+            if (!classExists)
+            {
+                string insert_class = "INSERT INTO classes (ID, class) VALUES ("
+                    "NULL, '" + entry.GetClass() + "'); '";
+
+                Insert_stmt(insert_class, DIR);
+
+                string get_class_id = "SELECT ID FROM classes WHERE class = '" + entry.GetClass() + "' ;";
+                class_ID = stoi(Select_stmt(get_class_id, DIR)[0][0]);
+
+            }
+            string create_student = "INSERT INTO students (ID, name, surname, classID) VALUES ("
                 "NULL, '"
                 + entry.GetName() + "', '"
-                + entry.GetSurname() + "');";
+                + entry.GetSurname() + "', '"
+                + to_string(class_ID) + "');";
+
 
             Insert_stmt(create_student, DIR);
             string get_id = "SELECT ID FROM students "
@@ -89,13 +131,28 @@ void WriteToDB(vector<Entry>& entries, const char* DIR)
 //Checks whether a student with a given name and surname alrready exists, returns its ID
 bool Student_exists(Entry entry, int& ID, const char* DIR)
 {
-    string select_students = "SELECT * FROM students;";
+    string select_students = "SELECT ID, name, surname FROM students;";
     Records students = Select_stmt(select_students, DIR);
     for (size_t j = 0; j < students.size(); j++)
     {
         if (entry.GetName() == students[j][1] && entry.GetSurname() == students[j][2])
         {
             ID = stoi(students[j][0]);
+            return true;
+        }
+    }
+    return false;
+}
+
+bool Class_exists(string clas, int& ID, const char* DIR)
+{
+    string select_classes = "SELECT * FROM classes;";
+    Records classes = Select_stmt(select_classes, DIR);
+    for (size_t j = 0; j < classes.size(); j++)
+    {
+        if (clas == classes[j][1] )
+        {
+            ID = stoi(classes[j][0]);
             return true;
         }
     }
