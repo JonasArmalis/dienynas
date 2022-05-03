@@ -7,7 +7,7 @@
     <?php
     $Name = $_POST['Name'];
     $Surname = $_POST['Surname'];
-
+    $Class = $_POST['Class'];
     $pdo = new PDO('sqlite:..\database\dienynas.db');
 
     //Checks is a students with a given name and sruname exists
@@ -29,7 +29,7 @@
     }
 
     if (!$studentExists) {
-        $create_student = "INSERT INTO students (ID, name, surname) VALUES ( NULL, '" . $Name . "', '" . $Surname . "');";
+        $create_student = "INSERT INTO students (ID, name, surname, classID) VALUES ( NULL, '" . $Name . "', '" . $Surname . "', '".$Class."');";
         $pdo->exec($create_student);
     }
 

@@ -19,8 +19,22 @@
 
         <form class="form-group" action="create-student.php" method="POST">
             Vardas<input type="text" class="form-control" name="Name"> <br>
-            Pavardė<input type="text" class="form-control" name="Surname"> <br>
-        
+            Pavardė<input type="text" class="form-control" name="Surname"> <br>       
+            Pasirinkite klase:
+            <select class="form-select" aria-label="Default select example" name="Class">
+                <?php
+
+                $pdo = new PDO('sqlite:..\database\dienynas.db');
+                $sql = "SELECT * FROM classes ;";
+                $result = $pdo->query($sql);
+
+                $rows = $result->fetchAll(PDO::FETCH_ASSOC);
+
+                foreach ($rows as $row) {
+                    echo "<option value=" . $row["ID"] . ">" . $row["class"] . "</option>";
+                }
+                ?>
+            </select> <br>
             <input type="submit" class="btn btn-primary" value="Įrašyti">
         </form>
     </div>

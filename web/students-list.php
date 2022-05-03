@@ -15,7 +15,9 @@
     <?php include 'header.php';
 
     $pdo = new PDO('sqlite:..\database\dienynas.db');
-    $getStudentsSql = "SELECT * FROM students WHERE ([status] IS NULL OR [status] = 'U');";
+    $getStudentsSql = "SELECT  s.ID ,c.class, s.name, s.surname FROM students s
+    JOIN classes c on s.classID = c.ID
+    WHERE (s.[status] IS NULL OR s.[status] = 'U');";
 
     $results = $pdo->query($getStudentsSql)->fetchAll(PDO::FETCH_ASSOC);
 
@@ -29,18 +31,22 @@
                 <tr>
                     <th scope="col">Vardas</th>
                     <th scope="col">Pavardė</th>
+                    <th scope="col">Klasė</th>
                     <th scope="col"> </th>
                 </tr>
             </thead>
             <tbody>
                 <?php
                 foreach ($results as $result) {
-                    echo "<tr>";
+                    echo "<tr>";    
                     echo "<td>";
                     echo $result['name'];
                     echo "</td>";
                     echo "<td>";
                     echo $result['surname'];
+                    echo "</td>";
+                    echo "<td>";
+                    echo $result['class'];
                     echo "</td>";
                     echo "<td>";
                     echo '<a  href="student-edit-form.php?studentID='.$result["ID"].'" class="btn btn-outline-dark">Redaguoti </a>';

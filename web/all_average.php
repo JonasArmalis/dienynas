@@ -61,6 +61,9 @@
                 $averages[$i]["name"] = $studentsAvg[0]["name"];
                 $averages[$i]["surname"] = $studentsAvg[0]["surname"];
                 $i = $i + 1;
+
+
+                
             }
         } else {
             $i = 0;
@@ -82,6 +85,7 @@
                 <tr>
                     <th scope="col">Vardas</th>
                     <th scope="col">Pavardė</th>
+                    <th scope="col">Klasė</th>
                     <th scope="col">Vidurkis</th>
                 </tr>
             </thead>
@@ -93,6 +97,7 @@
                         echo "<tr>";
                         echo "<td>" . $average['name'] . "</td>";
                         echo "<td>" . $average['surname'] . "</td>";
+  
                         echo "<td>" . round($average['avg'], 2) . "</td>";
                         echo "</tr>";
                     }

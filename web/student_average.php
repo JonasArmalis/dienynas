@@ -12,7 +12,7 @@
 </head>
 
 <body>
-    <?php include 'header.php'; ?>
+    <?php include 'header.php';?>
     <div>
         <h1>Pasirinkto mokinio vidurkiai </h1>
 
@@ -40,6 +40,13 @@
             </select>
         </form>
         <?php
+
+        /*$getStudentsSql = "SELECT  s.ID ,c.class, s.name, s.surname FROM students s
+        JOIN classes c on s.classID = c.ID
+        WHERE (s.[status] IS NULL OR s.[status] = 'U');";
+    
+        $subjects = $db->query($getStudentsSql)->fetchAll(PDO::FETCH_ASSOC);
+        */
         $getSubjectsSql = "SELECT * FROM subjects";
         $subjects = $db->query($getSubjectsSql)->fetchAll(PDO::FETCH_ASSOC);
         if ($studentID == NULL) {
@@ -73,6 +80,7 @@
                 <tr>
                     <th scope="col">Dalykas</th>
                     <th scope="col">Pažymiai</th>
+                    <th scope="col">Klasė</th>
                     <th scope="col"></th>
                     <th scope="col">Vidurkis</th>
                 </tr>
@@ -84,9 +92,7 @@
                     echo "<tr>";
                     echo "<td>" . $subject["subject"] . "</td>";
                     echo "<td>" . $subject["grades"] . "</td>";
-
-                    
-
+                    /*echo "<td>" . $subject['class']. "</td>";*/
                     if (round($subject["average"], 2) < 1) {
                         echo "<td> - </td>";
                         echo "<td> - </td>";
