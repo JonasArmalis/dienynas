@@ -19,10 +19,13 @@
                     <a class="nav-link" href="all_average.php">Bendri vidurkiai</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="student_average.php">Mokinio vidurkiai</a>
+                    <a class="nav-link" href="student_average.php">Dalykų vidurkiai</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="students-list.php">Mokinių sąrašas</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="class-average.php">Klasių vidurkiai</a>
                 </li>
             </ul>
         </div>

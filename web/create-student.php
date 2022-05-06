@@ -7,7 +7,7 @@
     <?php
     $Name = $_POST['Name'];
     $Surname = $_POST['Surname'];
-    $Class = $_POST['Class'];
+    $classID = $_POST['ClassID'];
     $pdo = new PDO('sqlite:..\database\dienynas.db');
 
     //Checks is a students with a given name and sruname exists
@@ -20,7 +20,7 @@
         if ($row['name'] == $Name && $row['surname'] == $Surname) {
             if($row['status'] == "D")
             {
-                $updateStatusSql = "UPDATE students SET `status` = 'U' WHERE ID  = '".$row["ID"]."';";
+                $updateStatusSql = "UPDATE students SET `status` = 'U',  `classID` = '".$classID. "' WHERE ID  = '".$row["ID"]."';";
                 $pdo->exec($updateStatusSql);
             }
             $student_ID = $row["ID"];
@@ -29,7 +29,7 @@
     }
 
     if (!$studentExists) {
-        $create_student = "INSERT INTO students (ID, name, surname, classID) VALUES ( NULL, '" . $Name . "', '" . $Surname . "', '".$Class."');";
+        $create_student = "INSERT INTO students (ID, name, surname, classID) VALUES ( NULL, '" . $Name . "', '" . $Surname . "', '".$classID."');";
         $pdo->exec($create_student);
     }
 

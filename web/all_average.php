@@ -40,44 +40,65 @@
                 }
                 ?>
             </select>
+            <h6>Pasirinkite klasę:</h6>
+            <select class="form-select" aria-label="Default select example" name="classID" onchange="this.form.submit()">
+                <option selected value="0">visų klasių mokiniai</option>
+                <?php
+
+                if (isset($_POST)) {
+                    $classID = $_POST['classID'];
+                }
+                $sql = "SELECT * FROM classes WHERE [status] <> 'D';";
+                $result = $db->query($sql);
+
+                $rows = $result->fetchAll(PDO::FETCH_ASSOC);
+                foreach ($rows as $row) {
+                    if ($row["ID"] == $classID) {
+                        echo "<option selected value=" . $row["ID"] . ">" . $row["class"] . "</option>";
+                    } else {
+                        echo "<option value=" . $row["ID"] . ">" . $row["class"] . "</option>";
+                    }
+                }
+                ?>
+            </select>
+
         </form>
         <?php
         //include 'include/student.inc.php';
 
 
         $averages = array();
-        $getStudentsSql = "SELECT * FROM students WHERE ([status] IS NULL OR [status] = 'U');";
+        if ($classID == 0) {
+            $getStudentsSql = "SELECT s.ID, s.name, s.surname, c.class, c.ID  as 'classID' FROM students s
+            JOIN classes c on c.ID = s.classID
+            WHERE s.status <> 'D'";
+        } else {
+            $getStudentsSql = "SELECT * FROM students WHERE [status] <> 'D' AND classID = '" . $classID . "';";
+        }
+
         $students = $db->query($getStudentsSql)->fetchAll(PDO::FETCH_ASSOC);
 
-
-        if ($subjectID == 0) {
-            $i = 0;
-            foreach ($students as $student) {
-                $getAvgSql = "SELECT AVG(grade) average, s.name, s.surname FROM grades g
+        $i = 0;
+        foreach ($students as $student) {
+            if ($subjectID == 0) {
+                $getAvgSql = "SELECT AVG(grade) average, s.name, s.surname, c.class FROM grades g
             JOIN students s on g.studentID = s.ID
-            WHERE g.studentID = '" . $student['ID'] . "' AND (g.[status] IS NULL OR g.[status] = 'U');";
-                $studentsAvg = $db->query($getAvgSql)->fetchAll(PDO::FETCH_ASSOC);
-                $averages[$i]["avg"] = $studentsAvg[0]["average"];
-                $averages[$i]["name"] = $studentsAvg[0]["name"];
-                $averages[$i]["surname"] = $studentsAvg[0]["surname"];
-                $i = $i + 1;
-
-
-                
-            }
-        } else {
-            $i = 0;
-            foreach ($students as $student) {
-                $getAvgSql = "SELECT AVG(grade) average, s.name, s.surname FROM grades g
+            JOIN classes c on c.ID = s.classID
+            WHERE g.studentID = '" . $student['ID'] . "' AND g.[status] <> 'D';";
+            } else {
+                $getAvgSql = "SELECT AVG(grade) average, s.name, s.surname, c.class FROM grades g
             JOIN students s on g.studentID = s.ID
-            WHERE g.studentID = '" . $student["ID"] . "' AND subjectID = '" . $subjectID . "' AND (g.[status] IS NULL OR g.[status] = 'U');";
-                $studentsAvg = $db->query($getAvgSql)->fetchAll(PDO::FETCH_ASSOC);
-                $averages[$i]["avg"] = $studentsAvg[0]["average"];
-                $averages[$i]["name"] = $studentsAvg[0]["name"];
-                $averages[$i]["surname"] = $studentsAvg[0]["surname"];
-                $i = $i + 1;
+            JOIN classes c on c.ID = s.classID
+            WHERE g.studentID = '" . $student["ID"] . "' AND subjectID = '" . $subjectID . "' AND g.[status] <> 'D';";
             }
+            $studentsAvg = $db->query($getAvgSql)->fetchAll(PDO::FETCH_ASSOC);
+            $averages[$i]["avg"] = $studentsAvg[0]["average"];
+            $averages[$i]["name"] = $studentsAvg[0]["name"];
+            $averages[$i]["surname"] = $studentsAvg[0]["surname"];
+            $averages[$i]["class"] = $studentsAvg[0]["class"];
+            $i = $i + 1;
         }
+
         ?>
 
         <table class="table table-striped">
@@ -85,7 +106,10 @@
                 <tr>
                     <th scope="col">Vardas</th>
                     <th scope="col">Pavardė</th>
-                    <th scope="col">Klasė</th>
+                    <?php
+                        if ($classID == 0)
+                            echo '<th scope="col">Klasė</th>';
+                        ?>
                     <th scope="col">Vidurkis</th>
                 </tr>
             </thead>
@@ -97,7 +121,8 @@
                         echo "<tr>";
                         echo "<td>" . $average['name'] . "</td>";
                         echo "<td>" . $average['surname'] . "</td>";
-  
+                        if ($classID ==0)
+                        echo "<td>" . $average['class'] . "</td>";
                         echo "<td>" . round($average['avg'], 2) . "</td>";
                         echo "</tr>";
                     }

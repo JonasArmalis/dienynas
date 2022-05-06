@@ -23,13 +23,15 @@
                 <?php
 
                 $pdo = new PDO('sqlite:..\database\dienynas.db');
-                $sql = "SELECT * FROM students WHERE ([status] IS NULL OR [status] = 'U');";
+                $sql = "SELECT s.ID, s.name, s.surname, c.class FROM students s
+                JOIN classes c on c.ID = s.classID
+                WHERE s.status <> 'D';";
                 $result = $pdo->query($sql);
 
                 $rows = $result->fetchAll(PDO::FETCH_ASSOC);
 
                 foreach ($rows as $row) {
-                    echo "<option value=" . $row["ID"] . ">" . $row["name"] . " " . $row["surname"] . "</option>";
+                    echo "<option value=" . $row["ID"] . ">" . $row["name"] . " " . $row["surname"] .  " " . $row["class"] .  "</option>";
                 }
                 ?>
             </select> <br>

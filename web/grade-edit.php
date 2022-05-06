@@ -13,7 +13,7 @@
 
 
     if ($_POST['action'] == 'Update') {
-        $updateGradeSql = "UPDATE grades SET grade = '". $newGrade."' WHERE ID  = '".$gradeID."' AND ([status] IS NULL OR [status] = 'U');";
+        $updateGradeSql = "UPDATE grades SET grade = '". $newGrade."' WHERE ID  = '".$gradeID."';";
         $pdo->exec($updateGradeSql);
     }
     else if ($_POST['action'] == 'Delete') {

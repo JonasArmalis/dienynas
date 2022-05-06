@@ -21,7 +21,7 @@
             Vardas<input type="text" class="form-control" name="Name"> <br>
             Pavardė<input type="text" class="form-control" name="Surname"> <br>       
             Pasirinkite klase:
-            <select class="form-select" aria-label="Default select example" name="Class">
+            <select class="form-select" aria-label="Default select example" name="ClassID">
                 <?php
 
                 $pdo = new PDO('sqlite:..\database\dienynas.db');

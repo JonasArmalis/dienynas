@@ -23,7 +23,7 @@
         $getSubjectSql = "SELECT * FROM subjects WHERE ID = '" . $subjectID . "';";
         $subject = $db->query($getSubjectSql)->fetchAll(PDO::FETCH_ASSOC)[0];
 
-        $getStudent = "SELECT * FROM students WHERE ID = '" . $studentID . "';";
+        $getStudent = "SELECT * FROM students WHERE ID = '" . $studentID . "' AND [status] <> 'D';";
         $student = $db->query($getStudent)->fetchAll(PDO::FETCH_ASSOC)[0];
 
 
@@ -43,9 +43,9 @@
             <select class="form-select" aria-label="Default select example" name="gradeID">
                 <?php
 
-                $getGradesSql = "SELECT ID, grade FROM grades WHERE studentID = '" . $studentID . "' AND subjectID = '" . $subjectID . "' AND ([status] IS NULL OR [status] = 'U');";
-                $result = $db->query($getGradesSql);
+                $getGradesSql = "SELECT ID, grade FROM grades WHERE studentID = '" . $studentID . "' AND subjectID = '" . $subjectID . "' AND [status] <> 'D';";
 
+                $result =  $db->query($getGradesSql);
                 $rows = $result->fetchAll(PDO::FETCH_ASSOC);
                 foreach ($rows as $row) {
 

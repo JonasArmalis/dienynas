@@ -12,46 +12,84 @@
 </head>
 
 <body>
-    <?php include 'header.php';
+    <?php include 'header.php'; ?>
+
+    <h1 class="head">Mokinių sąrašas</h1>
+    <h6>Pasirinkite klasę:</h6>
+    <form class="form-group" id="subjectForm" action="students-list.php" method="POST">
+        <select class="form-select" aria-label="Default select example" name="classID" onchange="this.form.submit()">
+            <option selected value="0">visų klasių mokiniai</option>
+            <?php
+
+            if (isset($_POST)) {
+                $classID = $_POST['classID'];
+            }
+            $db = new PDO('sqlite:..\database\dienynas.db');
+            $sql = "SELECT * FROM classes WHERE [status] <> 'D';";
+            $result = $db->query($sql);
+
+            $rows = $result->fetchAll(PDO::FETCH_ASSOC);
+            foreach ($rows as $row) {
+                if ($row["ID"] == $classID) {
+                    echo "<option selected value=" . $row["ID"] . ">" . $row["class"] . "</option>";
+                } else {
+                    echo "<option value=" . $row["ID"] . ">" . $row["class"] . "</option>";
+                }
+            }
+            ?>
+        </select>
+    </form>
+
+    <?php
 
     $pdo = new PDO('sqlite:..\database\dienynas.db');
-    $getStudentsSql = "SELECT  s.ID ,c.class, s.name, s.surname FROM students s
+
+    if ($classID == 0) {
+        $getStudentsSql = "SELECT s.ID ,c.class, s.name, s.surname FROM students s
     JOIN classes c on s.classID = c.ID
-    WHERE (s.[status] IS NULL OR s.[status] = 'U');";
+    WHERE s.[status] <> 'D';";
+    } else {
+        $getStudentsSql = "SELECT * FROM students WHERE [status] <> 'D' AND classID = '" . $classID . "';";
+    }
 
     $results = $pdo->query($getStudentsSql)->fetchAll(PDO::FETCH_ASSOC);
 
     ?>
 
 
-    <h1 class ="head">Mokinių sąrašas</h1>
+
     <div>
         <table class="table table-striped">
             <thead class="thead-dark">
                 <tr>
                     <th scope="col">Vardas</th>
                     <th scope="col">Pavardė</th>
-                    <th scope="col">Klasė</th>
+                    <?php
+                    if ($classID == 0)
+                        echo '<th scope="col">Klasė</th>';
+                    ?>
                     <th scope="col"> </th>
                 </tr>
             </thead>
             <tbody>
                 <?php
                 foreach ($results as $result) {
-                    echo "<tr>";    
+                    echo "<tr>";
                     echo "<td>";
                     echo $result['name'];
                     echo "</td>";
                     echo "<td>";
                     echo $result['surname'];
                     echo "</td>";
-                    echo "<td>";
-                    echo $result['class'];
-                    echo "</td>";
-                    echo "<td>";
-                    echo '<a  href="student-edit-form.php?studentID='.$result["ID"].'" class="btn btn-outline-dark">Redaguoti </a>';
-                    echo "</td>";
+                    if ($classID == 0) {
+                        echo "<td>";
+                        echo $result['class'];
+                        echo "</td>";
+                    }
 
+                    echo "<td>";
+                    echo '<a  href="student-edit-form.php?studentID=' . $result["ID"] . '" class="btn btn-outline-dark">Redaguoti </a>';
+                    echo "</td>";
                     echo "</tr>";
                 }
                 ?>

@@ -28,14 +28,29 @@
             echo  $student["name"] . " " . $student["surname"];
            ?>
         </h1>
+
         <form class="form-group" action="student-edit.php?id='<?php $studentID ?>' method="POST">
-
-            
-            Vardas
+            Vardas:
             <input type="text" value = "<?php echo $student["name"]?>" class="form-control" name="newName"> <br>
-            Pavarde
+            Pavardė:
             <input type="text" value = "<?php echo $student["surname"]?>" class="form-control" name="newSurname"> <br>
+            Klasė:
+            <select class="form-select" aria-label="Default select example" name="newClassID" >
+                <?php
+                $sql = "SELECT * FROM classes WHERE [status] <> 'D';";
+                $result = $db->query($sql);
 
+                $rows = $result->fetchAll(PDO::FETCH_ASSOC);
+                foreach ($rows as $row) {
+                    if ($row["ID"] == $student["classID"]) {
+                        echo "<option selected value=" . $row["ID"] . ">" . $row["class"] . "</option>";
+                    } else {
+                        echo "<option value=" . $row["ID"] . ">" . $row["class"] . "</option>";
+                    }
+                }
+                ?>
+            </select>
+            <br>
             <input name="action" value="Update" type="submit" class="btn btn-primary" value="Išsaugoti">
             <input name="action" value="Delete" type="submit" class="btn btn-danger" value="Ištrinti">
             <input name="id" value="<?php echo $studentID?>"style="display:none">
