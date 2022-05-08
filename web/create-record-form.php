@@ -51,6 +51,7 @@
                 ?>
             </select> <br>
             Pažymys<input type="number" class="form-control" name="grade"> <br>
+            Žinutė<input type="text" class="form-control" name="message"> <br>
             <input type="submit" class="btn btn-primary" value="Įrašyti">
         </form>
     </div>

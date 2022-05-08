@@ -8,6 +8,7 @@
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.min.js" integrity="sha384-skAcpIdS7UcVUC05LJ9Dxay8AXcDYfBJqt1CJ85S/CFujBsIzCIv+l9liuYLaMQ/" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="../style.css">
+    <script src="js/grade-messages.js"></script>
 </head>
 
 <body>
@@ -25,11 +26,7 @@
 
         $getStudent = "SELECT * FROM students WHERE ID = '" . $studentID . "' AND [status] <> 'D';";
         $student = $db->query($getStudent)->fetchAll(PDO::FETCH_ASSOC)[0];
-
-
-
-
-
+       
 
         ?>
         <h1>Pažymių redagavimas <br>
@@ -37,30 +34,34 @@
             echo  $student["name"] . " " . $student["surname"] . "<br> " . $subject["subject"];
             ?>
         </h1>
-        <form class="form-group" action="grade-edit.php" method="POST">
+        <form class="form-group" action="grade-edit.php" method="POST" ">
 
             Pasirinkite norimą pažymį
-            <select class="form-select" aria-label="Default select example" name="gradeID">
+            <select id="gradeSelect" class="form-select" aria-label="Default select example" name="gradeID" onchange="updateMessage()">
                 <?php
 
-                $getGradesSql = "SELECT ID, grade FROM grades WHERE studentID = '" . $studentID . "' AND subjectID = '" . $subjectID . "' AND [status] <> 'D';";
-
+                $getGradesSql = "SELECT * FROM grades WHERE studentID = '" . $studentID . "' AND subjectID = '" . $subjectID . "' AND [status] <> 'D';";
                 $result =  $db->query($getGradesSql);
                 $rows = $result->fetchAll(PDO::FETCH_ASSOC);
                 foreach ($rows as $row) {
-
-                    echo "<option value=" . $row["ID"] . ">" . $row["grade"] . "</option>";
+                    echo "<option selected value=" . $row["ID"] . ">" . $row["grade"] . "</option>";
+                    $msg = $row["message"];
                 }
                 ?>
-            </select>
+            </select> <br>
             Naujas Pažymys
             <input type="number" class="form-control" name="newGrade"> <br>
-
+            Žinutė
+            <input id="message" type="text" class="form-control" name="newMessage" 
+            <?php
+                echo 'value="' . $msg . '"';
+            ?>
+            > <br>
             <input name="action" value="Update" type="submit" class="btn btn-primary" value="Išsaugoti">
             <input name="action" value="Delete" type="submit" class="btn btn-danger" value="Ištrinti">
-            
+
         </form>
-    
+
     </div>
 </body>
 

@@ -46,7 +46,7 @@
         $getSubjectsSql = "SELECT * FROM subjects";
         $subjects = $db->query($getSubjectsSql)->fetchAll(PDO::FETCH_ASSOC);
         if ($studentID == NULL) {
-            $studentID = 1;
+            $studentID = $db->query("SELECT ID FROM students WHERE status <> 'D'")->fetchAll(PDO::FETCH_ASSOC)[0]["ID"];
         }
 
 
@@ -94,6 +94,9 @@
                         echo "<td> - </td>";
                         echo "<td> - </td>";
                     } else {
+                        //$getGradesSql = "SELECT ID FROM grades WHERE studentID = '" . $studentID . "' AND subjectID = '" . $subject["ID"] . "' AND [status] <> 'D';";
+                        //$gradeID = $db->query($getGradesSql)->fetchAll(PDO::FETCH_ASSOC)[0]["ID"];
+
                         echo '<td> <a  href="grade-edit-form.php?subjectID=' . $subject["ID"] . '&studentID=' . $studentID . '" class="btn btn-outline-dark">Redaguoti </a> </td>';
                         echo "<td>" . round($subject["average"], 2) . "</td>";
                     }
