@@ -92,7 +92,7 @@
             WHERE g.studentID = '" . $student["ID"] . "' AND subjectID = '" . $subjectID . "' AND g.[status] <> 'D';";
             }
             $studentsAvg = $db->query($getAvgSql)->fetchAll(PDO::FETCH_ASSOC);
-            $averages[$i]["avg"] = $studentsAvg[0]["average"];
+            $averages[$i]["avg"] = round($studentsAvg[0]["average"], 2);
             $averages[$i]["name"] = $studentsAvg[0]["name"];
             $averages[$i]["surname"] = $studentsAvg[0]["surname"];
             $averages[$i]["class"] = $studentsAvg[0]["class"];
@@ -115,7 +115,8 @@
             </thead>
             <tbody>
                 <?php
-                rsort($averages);
+                include 'sort-callbacks.php';
+                usort($averages, "compare2");
                 foreach ($averages as $average) {
                     if ($average['name'] != NULL && $average['surname'] != NULL && $average['avg'] != NULL) {
                         echo "<tr>";
@@ -123,7 +124,7 @@
                         echo "<td>" . $average['surname'] . "</td>";
                         if ($classID ==0)
                         echo "<td>" . $average['class'] . "</td>";
-                        echo "<td>" . round($average['avg'], 2) . "</td>";
+                        echo "<td>" . $average['avg'] . "</td>";
                         echo "</tr>";
                     }
                 }

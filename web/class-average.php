@@ -79,7 +79,8 @@
             </thead>
             <tbody>
                 <?php
-                rsort($averages);
+                   include 'sort-callbacks.php';
+                   usort($averages, "compare3");
                 foreach ($averages as $average) {
                     echo "<tr>";
 

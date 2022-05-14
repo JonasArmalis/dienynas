@@ -73,6 +73,9 @@
             </thead>
             <tbody>
                 <?php
+
+                include 'sort-callbacks.php';
+                usort($results, "compare1");
                 foreach ($results as $result) {
                     echo "<tr>";
                     echo "<td>";
