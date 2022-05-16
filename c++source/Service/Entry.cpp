@@ -1,6 +1,6 @@
 #include "Entry.h"
 
-Entry::Entry(string name, string surname, string subject, string cl, int grade)
+Entry::Entry(string name, string surname, string subject, string cl, int grade, string msg)
 {
 	this->grade = 0;
 	this->name = name;
@@ -8,6 +8,7 @@ Entry::Entry(string name, string surname, string subject, string cl, int grade)
 	this->subject = subject;
 	this->clas = cl;
 	this->grade = grade;
+	this->msg = msg;
 }
 
 Entry::~Entry()
@@ -31,6 +32,16 @@ void Entry::SetSubject(string val)
 void Entry::SetGrade(int val)
 {
 	this->grade = val;
+}
+
+void Entry::SetMessage(string val)
+{
+	this->msg = val;
+}
+
+string Entry::GetMessage()
+{
+	return this->msg;
 }
 
 string Entry::GetName()

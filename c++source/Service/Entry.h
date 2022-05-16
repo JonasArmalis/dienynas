@@ -8,32 +8,30 @@ class Entry
 
 public:
 	//Constructors/Destructors
-	Entry(string, string , string , string, int);
+	Entry(string, string , string , string, int, string);
 	~Entry();
 
-	//Functions
-
+	//Functions 
 	//Setters
 	void SetName(string);
 	void SetSurname(string);
 	void SetSubject(string);
 	void SetGrade(int);
-
+	void SetMessage(string);
 	//Getters
 	string GetName();
 	string GetSurname();
 	string GetSubject();
 	string GetClass();
+	string GetMessage();
 	int GetGrade();
-
-
-
 
 private:
 	string clas;
 	string name;
 	string surname;
 	string subject;
+	string msg;
 	int grade;
 
 	

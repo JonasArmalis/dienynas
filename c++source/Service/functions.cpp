@@ -16,12 +16,20 @@ void ReadFiles(vector<Entry>& entries, vector <string>& files)
         ifstream in(files[i]);
         for (size_t j = 0; !in.eof(); j++)
         {
-            string name, surname, subject, clas;
+            string name, surname, subject, clas, msg;
             int grade;
 
             in >> name >> surname >> subject >> grade>> clas;
 
-            Entry container(name, surname, subject, clas, grade);
+			char c;
+			in >> c;
+
+			while (c !='\n')
+			{
+				msg = msg + c;
+			}
+
+            Entry container(name, surname, subject, clas, grade, msg);
             entries.push_back(container);
         }
         in.close();
@@ -32,7 +40,7 @@ void Print(vector <Entry>& entries)
 {
     system("CLS");
     for (size_t i = 0; i < entries.size(); i++)
-        cout << entries[i].GetName() << " " << entries[i].GetSurname() << " " << entries[i].GetSubject() << " " << entries[i].GetGrade() << endl;
+        cout << entries[i].GetName() << " " << entries[i].GetSurname() << " " << entries[i].GetSubject() << " " << entries[i].GetGrade() << " " << entries[i].GetClass() << " "  << entries[i].GetMessage() << endl;
 }
 
 void DeleteDirectoryContents(const char* PATH)
@@ -81,11 +89,12 @@ void WriteToDB(vector<Entry>& entries, const char* DIR)
         //If a student already exists, then we only insert the grade into the grades table
         if (studentExists)
         {
-            string insert_grade = "INSERT INTO grades (ID, studentID, subjectID, grade) VALUES ("
+            string insert_grade = "INSERT INTO grades (ID, studentID, subjectID, grade, message) VALUES ("
                 "NULL, '"
                 + to_string(student_ID) + "', '"
                 + to_string(subject_ID) + "', '"
-                + to_string(entry.GetGrade()) + "');";
+				+ to_string(entry.GetGrade()) + "', '"
+                + to_string(entry.GetMessage()) + "');";
 
             Insert_stmt(insert_grade, DIR);
         }
@@ -117,11 +126,12 @@ void WriteToDB(vector<Entry>& entries, const char* DIR)
 
             student_ID = stoi(Select_stmt(get_id, DIR)[0][0]);
 
-            string insert_grade = "INSERT INTO grades (ID, studentID, subjectID, grade) VALUES ("
+            string insert_grade = "INSERT INTO grades (ID, studentID, subjectID, grade, message) VALUES ("
                 "NULL, '"
                 + to_string(student_ID) + "', '"
                 + to_string(subject_ID) + "', '"
-                + to_string(entry.GetGrade()) + "');";
+				+ to_string(entry.GetGrade()) + "', '"
+				+ to_string(entry.GetMessage()) + "');";
 
             Insert_stmt(insert_grade, DIR);
         }
