@@ -20,7 +20,6 @@ void ReadDir(vector<string>& files, const char* PATH);
 void ReadFiles(vector<Entry>& entries, vector <string>& files);
 void Print(vector <Entry>& entries);
 void DeleteDirectoryContents(const char* PATH);
-bool recycle_file(string path);
 bool Student_exists(Entry entry, int& ID, const char* DIR);
 bool Class_exists(string clas, int& ID, const char* DIR);
 void WriteToDB(vector<Entry>& entries, const char* DIR);

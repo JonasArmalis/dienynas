@@ -17,13 +17,13 @@ public:
 	void SetSurname(string);
 	void SetSubject(string);
 	void SetGrade(int);
-	void SetMessage(string);
+	void SetMsg(string);
 	//Getters
 	string GetName();
 	string GetSurname();
 	string GetSubject();
 	string GetClass();
-	string GetMessage();
+	string GetMsg();
 	int GetGrade();
 
 private:

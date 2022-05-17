@@ -34,12 +34,12 @@ void Entry::SetGrade(int val)
 	this->grade = val;
 }
 
-void Entry::SetMessage(string val)
+void Entry::SetMsg(string val)
 {
 	this->msg = val;
 }
 
-string Entry::GetMessage()
+string Entry::GetMsg()
 {
 	return this->msg;
 }

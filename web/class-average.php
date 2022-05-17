@@ -14,7 +14,7 @@
 <body>
     <?php include 'header.php'; ?>
     <div>
-        <h1>Pasirinktos klasės mokinių vidurkiai </h1>
+        <h1>Pasirinkto dalyko klasių vidurkiai </h1>
 
         <form class="form-group" id="subjectForm" action="class-average.php" method="POST">
             <h6>Dalykas:</h6>

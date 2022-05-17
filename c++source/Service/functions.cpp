@@ -20,15 +20,8 @@ void ReadFiles(vector<Entry>& entries, vector <string>& files)
             int grade;
 
             in >> name >> surname >> subject >> grade>> clas;
-
-			char c;
-			in >> c;
-
-			while (c !='\n')
-			{
-				msg = msg + c;
-			}
-
+            getline(in, msg);
+            
             Entry container(name, surname, subject, clas, grade, msg);
             entries.push_back(container);
         }
@@ -40,38 +33,18 @@ void Print(vector <Entry>& entries)
 {
     system("CLS");
     for (size_t i = 0; i < entries.size(); i++)
-        cout << entries[i].GetName() << " " << entries[i].GetSurname() << " " << entries[i].GetSubject() << " " << entries[i].GetGrade() << " " << entries[i].GetClass() << " "  << entries[i].GetMessage() << endl;
+        cout << entries[i].GetName() << " " << entries[i].GetSurname() << " " << entries[i].GetSubject() << " " << entries[i].GetGrade() << " " << entries[i].GetClass() << " "  << entries[i].GetMsg() << endl;
 }
 
 void DeleteDirectoryContents(const char* PATH)
 {
     for (const auto& entry : fs::directory_iterator(PATH))
     {
-        recycle_file(entry.path().u8string());
+        fs::remove_all(entry.path());
     }
-       //fs::remove_all(entry.path());
+       
 }
 
-bool recycle_file(string path) {
-
-    std::wstring widestr = std::wstring(path.begin(), path.end());
-    const wchar_t* widecstr = widestr.c_str();
-
-    SHFILEOPSTRUCT fileOp; 
-    fileOp.hwnd = NULL;
-    fileOp.wFunc = FO_DELETE;
-    fileOp.pFrom = widecstr;
-    fileOp.pTo = NULL;
-    fileOp.fFlags = FOF_ALLOWUNDO | FOF_NOERRORUI | FOF_NOCONFIRMATION | FOF_SILENT;
-    int result = SHFileOperation(&fileOp);
-
-    if (result != 0) {
-        return false;
-    }
-    else {
-        return true;
-    }
-}
 
 void WriteToDB(vector<Entry>& entries, const char* DIR)
 {
@@ -94,7 +67,7 @@ void WriteToDB(vector<Entry>& entries, const char* DIR)
                 + to_string(student_ID) + "', '"
                 + to_string(subject_ID) + "', '"
 				+ to_string(entry.GetGrade()) + "', '"
-                + to_string(entry.GetMessage()) + "');";
+                + entry.GetMsg() + "');";
 
             Insert_stmt(insert_grade, DIR);
         }
@@ -131,7 +104,7 @@ void WriteToDB(vector<Entry>& entries, const char* DIR)
                 + to_string(student_ID) + "', '"
                 + to_string(subject_ID) + "', '"
 				+ to_string(entry.GetGrade()) + "', '"
-				+ to_string(entry.GetMessage()) + "');";
+				+ entry.GetMsg() + "');";
 
             Insert_stmt(insert_grade, DIR);
         }
